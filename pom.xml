@@ -7,7 +7,7 @@
     <artifactId>c-compiler</artifactId>
     <version>0.0.1</version>
     <name>C Compiler</name>
-    <description>A tiny DSL for stock trading</description>
+    <description>A tiny c compiler</description>
 	<developers>
 		<developer>
 			<name>Peter</name>
