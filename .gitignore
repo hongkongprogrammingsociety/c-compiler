@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+
+# Java
+*.class
+*.log
+*.ctxt
+hs_err_pid*
+replay_pid*
+
+# Maven
+/target/
+# Keep Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper-downloader.jar
+pom.xml.versionsBackup
+dependency-reduced-pom.xml
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.buildpath
+.factorypath
+
+# VS Code
+.vscode/
+.history/
+
+# Editors / OS cruft
+*~
+*.swp
+*.swo
+Thumbs.db
