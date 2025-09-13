@@ -4,6 +4,7 @@ Experimental c compiler
 
 # Author
 
-Peter, \<peter@hkprog.org>, Chairman of [https://hkprog.org](Hong Kong Programming Society)
+Peter, \<peter@hkprog.org>, Chairman of [Hong Kong Programming Society](https://hkprog.org)
+
 
 
