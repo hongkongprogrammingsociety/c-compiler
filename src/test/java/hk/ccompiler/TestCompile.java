@@ -1,4 +1,4 @@
-package com.hoodlum;
+package hk.ccompiler;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
