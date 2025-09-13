@@ -1,7 +1,7 @@
-package hk.hkprog.elf;
+package org.hkprog.elf;
 
-import hk.hkprog.codegen.AssemblyProgram;
-import hk.hkprog.codegen.AssemblySection;
+import org.hkprog.codegen.AssemblyProgram;
+import org.hkprog.codegen.AssemblySection;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -1,7 +1,11 @@
-package hk.hkprog.codegen;
+package org.hkprog.codegen;
 
-import hk.hkprog.ir.*;
-import java.util.*;
+import org.hkprog.ir.IRCallInstruction;
+import org.hkprog.ir.IRFunction;
+import org.hkprog.ir.IRInstruction;
+import org.hkprog.ir.IRLoadConstantInstruction;
+import org.hkprog.ir.IRProgram;
+import org.hkprog.ir.IRReturnInstruction;
 
 /**
  * Generates x86-64 assembly code from intermediate representation

@@ -1,4 +1,4 @@
-package hk.hkprog.ir;
+package org.hkprog.ir;
 
 /**
  * Represents a parameter in a function

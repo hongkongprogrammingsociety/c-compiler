@@ -1,6 +1,6 @@
-package hk.hkprog.elf;
+package org.hkprog.elf;
 
-import hk.hkprog.codegen.AssemblySection;
+import org.hkprog.codegen.AssemblySection;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package hk.hkprog.ir;
+package org.hkprog.ir;
 
 /**
  * Base class for all IR instructions

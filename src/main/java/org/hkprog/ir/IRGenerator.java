@@ -1,4 +1,4 @@
-package hk.hkprog.ir;
+package org.hkprog.ir;
 
 import org.antlr.v4.runtime.tree.*;
 import com.hoodlum.antlr.CBaseVisitor;

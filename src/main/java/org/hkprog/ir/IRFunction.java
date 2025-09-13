@@ -1,4 +1,4 @@
-package hk.hkprog.ir;
+package org.hkprog.ir;
 
 import java.util.*;
 

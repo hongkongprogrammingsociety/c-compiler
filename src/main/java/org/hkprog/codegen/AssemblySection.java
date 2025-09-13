@@ -1,4 +1,4 @@
-package hk.hkprog.codegen;
+package org.hkprog.codegen;
 
 import java.util.*;
 

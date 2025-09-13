@@ -1,15 +1,15 @@
-package hk.hkprog;
+package org.hkprog;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import com.hoodlum.antlr.CLexer;
 import com.hoodlum.antlr.CParser;
-import hk.hkprog.ir.*;
-import hk.hkprog.codegen.*;
-import hk.hkprog.elf.*;
 
-import java.io.*;
-import java.nio.file.*;
+import org.hkprog.codegen.AssemblyProgram;
+import org.hkprog.codegen.X86CodeGenerator;
+import org.hkprog.elf.ELFWriter;
+import org.hkprog.ir.IRGenerator;
+import org.hkprog.ir.IRProgram;
 
 /**
  * Main C Compiler class that orchestrates the compilation process
