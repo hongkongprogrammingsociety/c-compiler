@@ -39,8 +39,8 @@ public class TestCompile {
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
         
         // Clean up
-        inputFile.delete();
-        outputFile.delete();
+        // inputFile.delete();
+        // outputFile.delete();
     }
     
     @Test
@@ -66,7 +66,7 @@ public class TestCompile {
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
         
         // Clean up
-        outputFile.delete();
+        // outputFile.delete();
     }
     
     @Test
@@ -92,7 +92,7 @@ public class TestCompile {
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
         
         // Clean up
-        outputFile.delete();
+        // outputFile.delete();
     }
     
     @Test
@@ -124,8 +124,8 @@ public class TestCompile {
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
         
         // Clean up
-        inputFile.delete();
-        outputFile.delete();
+        // inputFile.delete();
+        // outputFile.delete();
     }
     
     @Test
@@ -160,7 +160,7 @@ public class TestCompile {
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
         
         // Clean up
-        inputFile.delete();
-        outputFile.delete();
+        // inputFile.delete();
+        // outputFile.delete();
     }
 }
