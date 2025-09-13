@@ -13,14 +13,14 @@
 			<name>Peter</name>
 			<email>peter.hkprog.org</email>
 			<organization>HKPS</organization>
-			<organizationUrl>https://www.hkprgo.org</organizationUrl>
+			<organizationUrl>https://www.hkprog.org</organizationUrl>
 			<roles>
 				<role>Developer</role>
 			</roles>
 		</developer>
 	</developers>
 	<scm>
-		<url>https://github.com/hongkongprogrammingsociety/hoodlum</url>
+		<url>https://github.com/hongkongprogrammingsociety/c-compiler</url>
 	</scm>
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
@@ -57,10 +57,10 @@
                 </executions>
 				<configuration>
 					<sourceDirectory>${basedir}/src/main/antlr4</sourceDirectory>
-					<outputDirectory>${project.build.directory}/generated-sources/antlr4/com/hoodlum/antlr</outputDirectory>
+					<outputDirectory>${project.build.directory}/generated-sources/antlr4/org.hkprog/antlr</outputDirectory>
 					<arguments>
 						<argument>-package</argument>
-						<argument>com.hoodlum.antlr</argument>
+						<argument>org.hkprog.antlr</argument>
 					</arguments>
 					<listener>true</listener>
 					<visitor>true</visitor>
@@ -84,7 +84,7 @@
                             <shadedClassifierName>shaded</shadedClassifierName>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.hoodlum.BytecodeRunner</mainClass>
+                                    <mainClass>org.hkprog.CCompiler</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

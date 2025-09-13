@@ -2,8 +2,8 @@ package org.hkprog;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import com.hoodlum.antlr.CLexer;
-import com.hoodlum.antlr.CParser;
+import org.hkprog.antlr.CLexer;
+import org.hkprog.antlr.CParser;
 
 import org.hkprog.codegen.AssemblyProgram;
 import org.hkprog.codegen.X86CodeGenerator;

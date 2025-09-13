@@ -1,9 +1,9 @@
 package org.hkprog.ir;
 
 import org.antlr.v4.runtime.tree.*;
-import com.hoodlum.antlr.CBaseVisitor;
-import com.hoodlum.antlr.CParser;
 import java.util.*;
+import org.hkprog.antlr.CBaseVisitor;
+import org.hkprog.antlr.CParser;
 
 /**
  * Generates intermediate representation from the C AST

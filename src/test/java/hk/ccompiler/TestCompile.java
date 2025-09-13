@@ -1,8 +1,6 @@
 package hk.ccompiler;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
 
 import org.hkprog.CCompiler;
 
@@ -10,25 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.Path;
 
 public class TestCompile {
     
-    @TempDir
-    Path tempDir;
-    
-    private CCompiler compiler;
-    
-    @BeforeEach
-    void setUp() {
-        compiler = new CCompiler();
-    }
-    
     @Test
     void testCompileSimpleProgram() throws Exception {
-        // Create a temporary C file
-        File inputFile = tempDir.resolve("test.c").toFile();
-        File outputFile = tempDir.resolve("test.out").toFile();
+        // Create a test C file in current directory
+        File inputFile = new File("test_simple.c");
+        File outputFile = new File("test_simple.out");
         
         String cCode = """
             int main()
@@ -42,6 +29,7 @@ public class TestCompile {
         }
         
         // Test the full compilation pipeline
+        CCompiler compiler = new CCompiler();
         assertDoesNotThrow(() -> {
             compiler.compile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
         }, "Compilation should not throw exceptions");
@@ -49,6 +37,10 @@ public class TestCompile {
         // Verify output file was created
         assertTrue(outputFile.exists(), "Output file should be created");
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
+        
+        // Clean up
+        inputFile.delete();
+        outputFile.delete();
     }
     
     @Test
@@ -63,14 +55,18 @@ public class TestCompile {
             return;
         }
         
-        File outputFile = tempDir.resolve("helloworld.out").toFile();
+        File outputFile = new File("helloworld_test.out");
         
+        CCompiler compiler = new CCompiler();
         assertDoesNotThrow(() -> {
             compiler.compile(exampleFile.getAbsolutePath(), outputFile.getAbsolutePath());
         }, "Compilation of hello world should not throw exceptions");
         
         assertTrue(outputFile.exists(), "Output file should be created");
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
+        
+        // Clean up
+        outputFile.delete();
     }
     
     @Test
@@ -85,21 +81,25 @@ public class TestCompile {
             return;
         }
         
-        File outputFile = tempDir.resolve("funccall.out").toFile();
+        File outputFile = new File("funccall_test.out");
         
+        CCompiler compiler = new CCompiler();
         assertDoesNotThrow(() -> {
             compiler.compile(exampleFile.getAbsolutePath(), outputFile.getAbsolutePath());
         }, "Compilation of function call example should not throw exceptions");
         
         assertTrue(outputFile.exists(), "Output file should be created");
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
+        
+        // Clean up
+        outputFile.delete();
     }
     
     @Test
     void testCompileWithVariables() throws Exception {
         // Create a test with variable declarations
-        File inputFile = tempDir.resolve("variables.c").toFile();
-        File outputFile = tempDir.resolve("variables.out").toFile();
+        File inputFile = new File("test_variables.c");
+        File outputFile = new File("test_variables.out");
         
         String cCode = """
             int main()
@@ -115,19 +115,24 @@ public class TestCompile {
             writer.write(cCode);
         }
         
+        CCompiler compiler = new CCompiler();
         assertDoesNotThrow(() -> {
             compiler.compile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
         }, "Compilation with variables should not throw exceptions");
         
         assertTrue(outputFile.exists(), "Output file should be created");
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
+        
+        // Clean up
+        inputFile.delete();
+        outputFile.delete();
     }
     
     @Test
     void testCompileWithFunctionDefinition() throws Exception {
         // Create a test with function definition
-        File inputFile = tempDir.resolve("function.c").toFile();
-        File outputFile = tempDir.resolve("function.out").toFile();
+        File inputFile = new File("test_function.c");
+        File outputFile = new File("test_function.out");
         
         String cCode = """
             int add(int a, int b)
@@ -146,11 +151,16 @@ public class TestCompile {
             writer.write(cCode);
         }
         
+        CCompiler compiler = new CCompiler();
         assertDoesNotThrow(() -> {
             compiler.compile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
         }, "Compilation with function definition should not throw exceptions");
         
         assertTrue(outputFile.exists(), "Output file should be created");
         assertTrue(outputFile.length() > 0, "Output file should not be empty");
+        
+        // Clean up
+        inputFile.delete();
+        outputFile.delete();
     }
 }
