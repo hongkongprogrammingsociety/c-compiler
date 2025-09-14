@@ -60,11 +60,9 @@ public class IRGenerator extends CBaseVisitor<Void> {
 
 	@Override
 	public Void visitFunctionDefinition(CParser.FunctionDefinitionContext ctx) {
-		System.out.println("ctx=" + ctx.getText());
 		// Extract function name and type
 		CParser.DirectDeclaratorContext directDeclarator = ctx.declarator().directDeclarator();
 		String functionName = directDeclarator.directDeclarator().Identifier().getText();
-		System.out.println("functionName=" + functionName);
 
 		// For simplicity, assume all functions return int
 		IRType returnType = IRType.INT;
