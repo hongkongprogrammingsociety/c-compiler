@@ -39,3 +39,5 @@ out/
 *.swp
 *.swo
 Thumbs.db
+
+/*.out

@@ -6,26 +6,14 @@ import org.hkprog.CCompiler;
 
 
 import java.io.File;
-import java.io.FileWriter;
 
 public class TestCompileSimpleProgram {
 
 	@Test
 	void testCompileSimpleProgram() throws Exception {
 		// Create a test C file in current directory
-		File inputFile = new File("test_simple.c");
-		File outputFile = new File("test_simple.out");
-
-		String cCode = """
-            int main()
-            {
-                return 42;
-            }
-            """;
-
-		try (FileWriter writer = new FileWriter(inputFile)) {
-			writer.write(cCode);
-		}
+		File inputFile = new File("examples/test_function.c");
+		File outputFile = new File("test_function.out");
 
 		// Test the full compilation pipeline
 		CCompiler compiler = new CCompiler();
