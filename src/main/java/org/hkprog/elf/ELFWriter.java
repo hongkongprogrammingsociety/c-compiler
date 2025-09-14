@@ -1,11 +1,9 @@
 package org.hkprog.elf;
 
 import org.hkprog.codegen.AssemblyProgram;
-import org.hkprog.codegen.AssemblySection;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
 
 /**
  * Writes ELF (Executable and Linkable Format) files
@@ -42,19 +40,31 @@ public class ELFWriter {
         int ehSize = 64; // ELF header size
         int phSize = 56; // Program header size
         int numProgHeaders = 2; // TEXT and DATA segments
+        int numSectionHeaders = 4; // NULL, .text, .data, .shstrtab
         
         long textOffset = ehSize + (phSize * numProgHeaders);
-        long dataOffset = textOffset + textData.length;
         
-        // Align to page boundary
+        // Align to page boundary for segments
         textOffset = alignToPage(textOffset);
-        dataOffset = alignToPage(dataOffset);
+        
+        // Calculate data section offset (after text)
+        long dataOffset = textOffset + textData.length;
+        if (dataData.length > 0) {
+            dataOffset = alignToPage(dataOffset);
+        }
+        
+        // Place string table and section headers after data (not in loadable segments)
+        long shstrtabOffset = dataOffset + dataData.length;
+        if (shstrtabOffset < textOffset + 0x1000) {
+            shstrtabOffset = textOffset + 0x1000; // Ensure it's outside the text page
+        }
+        long sectionHeaderOffset = shstrtabOffset + 32; // String table size
         
         long textVAddr = BASE_ADDRESS + textOffset;
         long dataVAddr = BASE_ADDRESS + dataOffset;
         
         // Write ELF header
-        writeELFHeader(buffer, ehSize, phSize, numProgHeaders, textVAddr);
+        writeELFHeader(buffer, ehSize, phSize, numProgHeaders, textVAddr, sectionHeaderOffset, numSectionHeaders);
         
         // Write program headers
         writeTextProgramHeader(buffer, textOffset, textData.length, textVAddr);
@@ -72,6 +82,14 @@ public class ELFWriter {
         // Write data section
         buffer.write(dataData);
         
+        // Write string table
+        padToOffset(buffer, (int)shstrtabOffset);
+        buffer.write("\0.text\0.data\0.shstrtab\0".getBytes());
+        
+        // Write section headers
+        padToOffset(buffer, (int)sectionHeaderOffset);
+        writeSectionHeaders(buffer, textOffset, textData.length, dataOffset, dataData.length, shstrtabOffset);
+        
         // Write to file
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(buffer.toByteArray());
@@ -83,7 +101,7 @@ public class ELFWriter {
         System.out.println("ELF file written: " + outputFile);
     }
     
-    private void writeELFHeader(ByteArrayOutputStream buffer, int ehSize, int phSize, int numProgHeaders, long entryPoint) throws IOException {
+    private void writeELFHeader(ByteArrayOutputStream buffer, int ehSize, int phSize, int numProgHeaders, long entryPoint, long sectionHeaderOffset, int numSectionHeaders) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(64);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         
@@ -102,14 +120,14 @@ public class ELFWriter {
         bb.putInt(1); // e_version
         bb.putLong(entryPoint); // e_entry
         bb.putLong(ehSize); // e_phoff (program header offset)
-        bb.putLong(0); // e_shoff (section header offset)
+        bb.putLong(sectionHeaderOffset); // e_shoff (section header offset)
         bb.putInt(0); // e_flags
         bb.putShort((short)ehSize); // e_ehsize
         bb.putShort((short)phSize); // e_phentsize
         bb.putShort((short)numProgHeaders); // e_phnum
-        bb.putShort((short)0); // e_shentsize
-        bb.putShort((short)0); // e_shnum
-        bb.putShort((short)0); // e_shstrndx
+        bb.putShort((short)64); // e_shentsize (section header entry size)
+        bb.putShort((short)numSectionHeaders); // e_shnum
+        bb.putShort((short)3); // e_shstrndx (string table section index)
         
         buffer.write(bb.array());
     }
@@ -157,5 +175,49 @@ public class ELFWriter {
             int padding = targetOffset - currentSize;
             buffer.write(new byte[padding], 0, padding);
         }
+    }
+    
+    private void writeSectionHeaders(ByteArrayOutputStream buffer, long textOffset, int textSize, 
+                                   long dataOffset, int dataSize, long shstrtabOffset) throws IOException {
+        // Section header constants
+        int SHT_NULL = 0;
+        int SHT_PROGBITS = 1;
+        int SHT_STRTAB = 3;
+        int SHF_ALLOC = 2;
+        int SHF_EXECINSTR = 4;
+        int SHF_WRITE = 1;
+        
+        // NULL section header (index 0)
+        writeSectionHeader(buffer, 0, SHT_NULL, 0, 0, 0, 0, 0, 0, 0, 0);
+        
+        // .text section header (index 1)
+        writeSectionHeader(buffer, 1, SHT_PROGBITS, SHF_ALLOC | SHF_EXECINSTR, 
+                          BASE_ADDRESS + textOffset, textOffset, textSize, 0, 0, 1, 0);
+        
+        // .data section header (index 2)  
+        writeSectionHeader(buffer, 7, SHT_PROGBITS, SHF_ALLOC | SHF_WRITE,
+                          BASE_ADDRESS + dataOffset, dataOffset, dataSize, 0, 0, 1, 0);
+        
+        // .shstrtab section header (index 3)
+        writeSectionHeader(buffer, 13, SHT_STRTAB, 0, 0, shstrtabOffset, 23, 0, 0, 1, 0);
+    }
+    
+    private void writeSectionHeader(ByteArrayOutputStream buffer, int nameOffset, int type, int flags,
+                                  long addr, long offset, long size, int link, int info, int align, int entsize) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(64);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        
+        bb.putInt(nameOffset);    // sh_name
+        bb.putInt(type);          // sh_type
+        bb.putLong(flags);        // sh_flags
+        bb.putLong(addr);         // sh_addr
+        bb.putLong(offset);       // sh_offset
+        bb.putLong(size);         // sh_size
+        bb.putInt(link);          // sh_link
+        bb.putInt(info);          // sh_info
+        bb.putLong(align);        // sh_addralign
+        bb.putLong(entsize);      // sh_entsize
+        
+        buffer.write(bb.array());
     }
 }
